@@ -19,30 +19,33 @@ describe('Blog Posts', function() {
 	// test strategy:
 	// make request to `/blog-posts`
 	it('should list items on GET', function() {
-   
-    return chai.request(app)
-      .get('/blog-posts')
-      .then(function(res) {
-        expect(res).to.have.status(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.a('array');
+	    return chai.request(app)
+	      .get('/blog-posts')
+	      .then(function(res) {
+	        expect(res).to.have.status(200);
+	        expect(res).to.be.json;
+	        expect(res.body).to.be.a('array');
 
-        // because we create two items on app load
-        expect(res.body.length).to.be.at.least(1);
-      
-        const expectedKeys = ['id', 'title', 'content', 'author', 'publishDate'];
-        res.body.forEach(function(item) {
-          expect(item).to.be.a('object');
-          expect(item).to.include.keys(expectedKeys);
-        });
-      });
+	        // because we create two items on app load
+	        expect(res.body.length).to.be.at.least(1);
+	      
+	        const expectedKeys = ['id', 'title', 'content', 'author', 'publishDate'];
+	        res.body.forEach(function(item) {
+	          expect(item).to.be.a('object');
+	          expect(item).to.include.keys(expectedKeys);
+	        });
+	      });
   	});
 
 	//  1. make a POST request with data for a new item
   	//  2. inspect response object and prove it has right
   	//  status code and that the returned object has an `id`
-  	 it('should add an item on POST', function() {
-    const newItem = {title: 'Avengers: Infinity War', content: 'The Avengers battled their way to global box office domination this weekend', author: 'Frank Pallotta'};
+  	it('should add an item on POST', function() {
+    const newItem = {
+    	title: 'Avengers: Infinity War', 
+    	content: 'The Avengers battled their way to global box office domination this weekend', 
+    	author: 'Frank Pallotta'
+    };
     return chai.request(app)
       .post('/blog-posts')
       .send(newItem)
@@ -86,7 +89,7 @@ describe('Blog Posts', function() {
       // prove that the PUT request has right status code
       // and returns updated item
       .then(function(res) {
-        expect(res).to.have.status(200);
+        expect(res).to.have.status(204);
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
         expect(res.body).to.deep.equal(updateData);
