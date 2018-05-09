@@ -138,7 +138,19 @@ function runServer(databaseUrl, port=PORT) {
     });
   });
 }
-
+function closeServer() {
+  return mongoose.disconnect().then => {
+    return new Promise((resolve, reject) => {
+      console.log('Closing server');
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+      });
+    });
+  }
+}
+/*
 function closeServer() {
   return new Promise((resolve, reject) => {
     console.log('Closing server');
@@ -151,7 +163,7 @@ function closeServer() {
       resolve();
     });
   });
-}
+}*/
 
 if (require.main === module) {
   runServer(DATABASE_URL).catch(err => console.error(err));
